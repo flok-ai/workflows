@@ -43,6 +43,7 @@ spec:
           azure.workload.identity/use: "true"
         annotations:
           azure.workload.identity/skip-containers: "init;wait"
+          ai-native-sdlc/repository: "{{workflow.parameters.repository}}"
       # Argo 4.1.6 mirrors main mounts into wait. Keep credentials in main.
       podSpecPatch: |
         containers:
@@ -51,6 +52,8 @@ spec:
               - mountPath: /mainctrfs/mnt/agent-secrets
                 $patch: delete
               - mountPath: /mainctrfs/mnt/hmac
+                $patch: delete
+              - mountPath: /mainctrfs/var/run/secrets/broker
                 $patch: delete
       volumes:
         - name: recipes
@@ -64,6 +67,13 @@ spec:
             readOnly: true
             volumeAttributes:
               secretProviderClass: planner-secrets
+        - name: broker-token
+          projected:
+            sources:
+              - serviceAccountToken:
+                  audience: token-broker
+                  expirationSeconds: 600
+                  path: token
         - name: hmac
           secret:
             secretName: "hmac-{{workflow.name}}-planner"
@@ -74,6 +84,8 @@ spec:
         command: [/usr/local/bin/agent-entrypoint]
         args: [sh, -c, "goose run --recipe /recipes/planner.yaml && test -f /workspace/.plan-uploaded"]
         env:
+          - name: GH_TOKEN_BROKER_URL
+            value: http://github-broker.github-broker.svc.cluster.local/v1/github-token
           - name: TASK_REPOSITORY
             value: "{{workflow.parameters.repository}}"
           - name: TASK_ISSUE
@@ -104,6 +116,9 @@ spec:
           - name: hmac
             mountPath: /mnt/hmac
             readOnly: true
+          - name: broker-token
+            mountPath: /var/run/secrets/broker
+            readOnly: true
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
@@ -124,6 +139,7 @@ spec:
           azure.workload.identity/use: "true"
         annotations:
           azure.workload.identity/skip-containers: "init;wait"
+          ai-native-sdlc/repository: "{{workflow.parameters.repository}}"
       # Argo 4.1.6 mirrors main mounts into wait. Keep credentials in main.
       podSpecPatch: |
         containers:
@@ -132,6 +148,8 @@ spec:
               - mountPath: /mainctrfs/mnt/agent-secrets
                 $patch: delete
               - mountPath: /mainctrfs/mnt/hmac
+                $patch: delete
+              - mountPath: /mainctrfs/var/run/secrets/broker
                 $patch: delete
       volumes:
         - name: recipes
@@ -145,6 +163,13 @@ spec:
             readOnly: true
             volumeAttributes:
               secretProviderClass: coder-secrets
+        - name: broker-token
+          projected:
+            sources:
+              - serviceAccountToken:
+                  audience: token-broker
+                  expirationSeconds: 600
+                  path: token
         - name: hmac
           secret:
             secretName: "hmac-{{workflow.name}}-coder"
@@ -155,6 +180,8 @@ spec:
         command: [/usr/local/bin/agent-entrypoint]
         args: [sh, -c, "goose run --recipe /recipes/coder.yaml && test -s /workspace/.pr-url"]
         env:
+          - name: GH_TOKEN_BROKER_URL
+            value: http://github-broker.github-broker.svc.cluster.local/v1/github-token
           - name: TASK_REPOSITORY
             value: "{{workflow.parameters.repository}}"
           - name: TASK_ISSUE
@@ -184,6 +211,9 @@ spec:
             readOnly: true
           - name: hmac
             mountPath: /mnt/hmac
+            readOnly: true
+          - name: broker-token
+            mountPath: /var/run/secrets/broker
             readOnly: true
         securityContext:
           allowPrivilegeEscalation: false
