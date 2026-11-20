@@ -85,7 +85,7 @@ Check owner UIDs match the Workflow UID and `blockOwnerDeletion` is false. Revie
 Run from this repository root. The bundle includes foreman, both recipes and the foreman script. Set `ACR` in your environment to your registry host with `export ACR='your-registry.azurecr.io'`, replacing the example host with yours.
 
 ```sh
-make apply
+make kustomize
 make submit REPOSITORY=julie-ng/aks-architect-ai ISSUE='<real-issue-number>'
 ```
 
