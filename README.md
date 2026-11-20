@@ -82,18 +82,11 @@ Check owner UIDs match the Workflow UID and `blockOwnerDeletion` is false. Revie
 
 [`templates/initial-release.yaml`](templates/initial-release.yaml) runs the reusable `foreman/foreman` step, then planner and coder pods. Requires the deployed foreman infrastructure/API above, the [planner/coder CSI classes](https://github.com/julie-ng/ai-native-sdlc-infrastructure#planner-and-coder-secret-mounts-18-26), and the published [agent-base runtime entrypoint](https://github.com/julie-ng/ai-native-sdlc-agent-images#runtime-secrets-and-git-setup). The target repository must have `main`, allow `julieio-goose` to push task branches/create PRs, and have its signing public key registered. The configured email, `me+goose@julie.io`, matches the verified email on that account's public GPG key (checked 2026-11-11).
 
-Render, lint, and apply from this repository root. This bundle includes foreman, both recipes and the foreman script:
+Run from this repository root. The bundle includes foreman, both recipes and the foreman script. Set `ACR` in your environment to your registry host with `export ACR='your-registry.azurecr.io'`, replacing the example host with yours.
 
 ```sh
-kubectl kustomize . > /tmp/initial-release-manifests.yaml
-argo lint --offline /tmp/initial-release-manifests.yaml
-kubectl apply -f /tmp/initial-release-manifests.yaml
-argo submit --from workflowtemplate/initial-release -n agents \
-  -p acr=<registry>.azurecr.io \
-  -p repository=julie-ng/aks-architect-ai \
-  -p issue=<real-issue-number> \
-  -p model=openai/gpt-5.2-codex \
-  --watch --log
+make apply
+make submit REPOSITORY=julie-ng/aks-architect-ai ISSUE='<real-issue-number>'
 ```
 
 | Parameter | Default | Description |
