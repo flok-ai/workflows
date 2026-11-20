@@ -157,3 +157,9 @@ ESLint checks code style; Argo lint and rendering check manifest structure only.
 | 2026-11-11 | Human dry-run: mount each role recipe as a single file with subPath instead of the whole recipes ConfigMap directory: Goose refused the symlinked recipe with OS error 40 in initial-release-7nzh4. Running pods do not receive ConfigMap updates through subPath; new runs create fresh pods. |
 | 2026-11-11 | Human run initial-release-wdwq9: Goose exited zero after an AI gateway 401, so require model-written upload/PR markers after Goose exits. These guard against failed or aborted runs, not fabricated completion; retain plan integrity checking and human PR review. |
 | 2026-11-19 | #11: planner and coder get GitHub tokens from the token broker, not the shared PAT. Each main container mounts a 10-minute ServiceAccount token (audience `token-broker`) at `/var/run/secrets/broker`, sets `GH_TOKEN_BROKER_URL`, and the pod carries the `ai-native-sdlc/repository` annotation; the broker picks the scope from the ServiceAccount and that annotation. PRs are now opened by the App (`julieio-ai-sdlc[bot]`) while commits stay authored and signed by `julieio-goose`. The PAT remains mounted until infrastructure removes it; the entrypoint ignores it when the broker URL is set. The broker mount is removed from `wait` by the pod patch. Generated-pod, Verified and log checks are human-run. |
+
+## License
+
+[flok](https://github.com/flok-ai) workflows is licensed under the [GNU Affero General Public License v3.0 only](./LICENSE) (AGPL-3.0-only). Copies, modified versions and network deployments must keep the attribution described in [NOTICE](./NOTICE).
+
+Versions up to and including v0.1.0 were released under the MIT License.
