@@ -11,7 +11,7 @@ help:
 	  'make submit-workflow REPOSITORY=owner/repo ISSUE=n [MODEL=model] [template=name]' \
 	  '                                      Submit and watch a workflow run' \
 	  'template defaults to initial-release. Updates support the initial-release bundle.' \
-	  'Set ACR in the environment. MODEL defaults to openai/gpt-5.2-codex.'
+	  'Set ACR to your registry host ending in .azurecr.io. MODEL defaults to openai/gpt-5.2-codex.'
 
 update-workflow:
 	$(if $(bundle_$(template)),,$(error No Kustomize bundle configured for template '$(template)'))
@@ -23,6 +23,7 @@ submit-workflow:
 	$(if $(strip $(REPOSITORY)),,$(error REPOSITORY is required))
 	$(if $(strip $(ISSUE)),,$(error ISSUE is required))
 	$(if $(strip $(ACR)),,$(error ACR is required))
+	$(if $(filter-out .azurecr.io,$(filter %.azurecr.io,$(ACR))),,$(error ACR must be a registry host ending in .azurecr.io))
 	argo submit --from 'workflowtemplate/$(template)' -n agents \
 	  -p acr='$(ACR)' \
 	  -p repository='$(REPOSITORY)' \
