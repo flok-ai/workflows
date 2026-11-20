@@ -1,7 +1,7 @@
 ## Working practices
 
 > [!NOTE]
-> Maintained in the parent ai-native-sdlc repository. Edit the source there, not this distributed copy.
+> Maintained in the parent flok repository. Edit the source there, not this distributed copy.
 
 ### Collaboration and scope
 

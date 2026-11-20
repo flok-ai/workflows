@@ -1,7 +1,7 @@
 ## Cross-session memory
 
 > [!NOTE]
-> Maintained in the parent ai-native-sdlc repository. Edit the source there, not this distributed copy.
+> Maintained in the parent flok repository. Edit the source there, not this distributed copy.
 
 - Personal memory is supplementary. Repository docs and ADRs remain authoritative; verify remembered technical claims against current files and sources, and flag discrepancies.
 - At session start, explicitly read the project's Markdown `MEMORY.md` index and task-relevant linked files if available. All harnesses, including Codex, must do this; do not assume memories were loaded automatically or infer their absence from an empty native memory database.
