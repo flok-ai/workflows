@@ -6,6 +6,7 @@
 ### Agent identity and credentials
 
 - Use the configured agent identity, never the human developer's identity. Sign all commits with the configured agent GPG key, including rewritten commits.
+- When authoring commits, include the model name and version in a co-author trailer, for example `Co-authored-by: Codex 6.1 Sol <codex@users.noreply.github.com>` or `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`. Preserve the trailer when rewriting those commits.
 - In a dev container, use the `devcontainer-agent-setup` skill once before committing, pushing, or `gh`/PR work. Setup mechanics belong in that skill; locate mounts through the hosting workspace's local devcontainer configuration and do not copy host-specific paths into repository docs.
 - If the skill or agent credentials are unavailable, continue permitted local work and report delivery limitations. Never substitute a personal identity.
 - Never print or copy credential values into documentation, commits, issues or PRs.
