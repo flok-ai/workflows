@@ -43,7 +43,7 @@ spec:
           azure.workload.identity/use: "true"
         annotations:
           azure.workload.identity/skip-containers: "init;wait"
-          ai-native-sdlc/repository: "{{workflow.parameters.repository}}"
+          flok-ai.com/repo: "{{workflow.parameters.repository}}"
       # Argo 4.1.6 mirrors main mounts into wait. Keep credentials in main.
       podSpecPatch: |
         containers:
@@ -139,7 +139,7 @@ spec:
           azure.workload.identity/use: "true"
         annotations:
           azure.workload.identity/skip-containers: "init;wait"
-          ai-native-sdlc/repository: "{{workflow.parameters.repository}}"
+          flok-ai.com/repo: "{{workflow.parameters.repository}}"
       # Argo 4.1.6 mirrors main mounts into wait. Keep credentials in main.
       podSpecPatch: |
         containers:
